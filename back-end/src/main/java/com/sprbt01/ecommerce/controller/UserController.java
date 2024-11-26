@@ -8,6 +8,8 @@ import com.sprbt01.ecommerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
@@ -59,6 +61,41 @@ public class UserController {
         User user = userService.getUserById(userId);
         // 如果用戶存在，返回 200 OK 狀態和用戶資料；若不存在，返回 404 Not Found 狀態
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        User user = userService.findByUsername(userDetails.getUsername());
+        UserResponse response = new UserResponse(user.getId(), user.getRole().getName());
+        return ResponseEntity.ok(response);
+    }
+
+    // 靜態內部類，用於響應用戶數據
+    public static class UserResponse {
+        private Long id;
+        private String role;
+
+        public UserResponse(Long id, String role) {
+            this.id = id;
+            this.role = role;
+        }
+
+        // Getter 和 Setter
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public String getRole() {
+            return role;
+        }
+
+        public void setRole(String role) {
+            this.role = role;
+        }
     }
 }
 

@@ -68,7 +68,15 @@ export default {
       this.$router.push("/register");
     },
     logout() {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        this.toast.error("您尚未登入！");
+        this.$router.push("/login");
+        return;
+      }
+
       localStorage.removeItem("token");
+      localStorage.removeItem("userId");
       this.toast.success("成功登出！");
       this.$router.push("/login");
     },

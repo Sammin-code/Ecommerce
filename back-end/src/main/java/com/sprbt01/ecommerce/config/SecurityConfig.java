@@ -76,7 +76,7 @@ public class SecurityConfig {
                                 // 公共路徑，所有人可以訪問
                                 .requestMatchers("/", "/api/products", "/api/users/login", "/error", "/api/users/register").permitAll()
                                 // 僅 ADMIN 角色可訪問的路徑
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/admin/**", "/api/orders/all").hasRole("ADMIN")
                                 // 其他路徑需要身份驗證
                                 .anyRequest().authenticated()
                 )

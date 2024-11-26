@@ -58,6 +58,16 @@ public class OrderController {
         List<Order> orders = orderService.getOrdersByUserId(userId);
         return ResponseEntity.ok(orders);
     }
+    /**
+     * Admin 查看所有訂單
+     * @return 包含所有訂單的 200 回應
+     */
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')") // 確保只有 Admin 有權限訪問
+    public ResponseEntity<List<Order>> getAllOrders() {
+        List<Order> orders = orderService.getAllOrders();
+        return ResponseEntity.ok(orders);
+    }
 
     /**
      * 確認訂單，將指定的商品從購物車中移至訂單

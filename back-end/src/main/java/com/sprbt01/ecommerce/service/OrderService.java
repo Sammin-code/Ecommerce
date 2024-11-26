@@ -136,6 +136,10 @@ public class OrderService {
 
         cartService.removeProductFromCart(userId, productId);
     }
+
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll(); // 使用 JPA Repository 的內建方法
+    }
 }
 
 

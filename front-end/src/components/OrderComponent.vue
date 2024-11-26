@@ -20,7 +20,6 @@
     <p v-else>沒有找到訂單。</p>
   </div>
 </template>
-
 <script>
 import axios from "axios";
 import { useToast } from "vue-toastification";
@@ -33,11 +32,10 @@ export default {
   data() {
     return {
       orders: [],
+      isAdmin: false, // 用來檢查是否是管理員
     };
   },
   async created() {
-    const userId = this.$route.params.userId;
-    console.log(userId);
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -45,16 +43,46 @@ export default {
       console.error("無法獲取到 token");
       return;
     }
+
     try {
-      const response = await axios.get(
-        `http://localhost:8081/api/orders/${userId}`,
+      // 從 localStorage 獲取 Token
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        this.toast.error("請先登入");
+        return;
+      }
+
+      // 發送請求以獲取用戶資訊
+      const userInfoResponse = await axios.get(
+        "http://localhost:8081/api/users/me",
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         },
       );
-      this.orders = response.data;
+
+      const { id: userId, role: userRole } = userInfoResponse.data;
+
+      console.log(userId, userRole);
+
+      // 判斷是否是 Admin
+      this.isAdmin = userRole === "ROLE_ADMIN";
+
+      // 根據角色獲取訂單
+      const ordersResponse = await axios.get(
+        this.isAdmin
+          ? "http://localhost:8081/api/orders/all"
+          : `http://localhost:8081/api/orders/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      this.orders = ordersResponse.data;
     } catch (error) {
       this.toast.error("獲取訂單失敗");
       console.error("獲取訂單失敗:", error);
