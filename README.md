@@ -31,3 +31,18 @@
    spring.datasource.url=jdbc:mysql://localhost:3306/ecommerce
    spring.datasource.username=你的用戶名
    spring.datasource.password=你的密碼
+## 3. 前端設置
+1. 下載專案
+   ```bash
+   git clone https://your-repo-url.git
+   cd ecommerce-frontend
+2. 安裝依賴
+   ```bash
+   npm install
+4. 啟動開發伺服器
+   ```bash
+   npm run serve
+
+啟動後，在瀏覽器打開 http://localhost:8080/
+   
+
