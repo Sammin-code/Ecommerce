@@ -14,6 +14,7 @@
 - 訂單確認與追蹤
 
 ## 管理員功能
+- 內建管理員帳號密碼皆為admin
 - 商品管理（新增、修改、刪除）
 - 訂單管理
 
@@ -27,6 +28,7 @@
 ## 2. 後端設置
 1. 配置 `application.properties`：
    ```properties
+   設置資料庫相關
    server.port=8081
    spring.datasource.url=jdbc:mysql://localhost:3306/ecommerce
    spring.datasource.username=你的用戶名
